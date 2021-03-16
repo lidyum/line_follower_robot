@@ -1,16 +1,8 @@
-import keyboard
+import time
 
-loop = ""
-while loop == "":
+from pip._vendor.distlib.compat import raw_input
 
-    if keyboard.read_key() == "w":
-        print("You pressed w")
-
-    if keyboard.read_key() == "a":
-        print("You pressed a")
-
-    if keyboard.read_key() == "s":
-        print("You pressed s")
-
-    if keyboard.read_key() == "d":
-        print("You pressed d")
+while True:
+    key = raw_input()
+    print(key)
+    time.sleep(2)
