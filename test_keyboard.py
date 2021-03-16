@@ -1,5 +1,10 @@
 import curses
 
+import RPi.GPIO as GPIO
+PIN_LED = 12
+GPIO.setmode(GPIO.BOARD)  # set pin numbering system
+GPIO.setup(PIN_LED, GPIO.OUT)
+
 # Get the curses window, turn off echoing of keyboard to screen, turn on
 # instant (no waiting) key response, and use special values for cursor keys
 screen = curses.initscr()
@@ -14,8 +19,10 @@ try:
             break
         elif char == curses.KEY_UP:
             print("up")
+            GPIO.output(8, GPIO.HIGH)
         elif char == curses.KEY_DOWN:
             print("down")
+            GPIO.output(8, GPIO.LOW)
         elif char == curses.KEY_RIGHT:
             print("right")
         elif char == curses.KEY_LEFT:
