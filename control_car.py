@@ -38,6 +38,7 @@ try:
         elif char == 10:
             print("stop")
         else:
+            print("stop motor")
             GPIO.output(MOTOR_LEFT_IN1, GPIO.LOW)
             GPIO.output(MOTOR_LEFT_IN2, GPIO.LOW)
 
