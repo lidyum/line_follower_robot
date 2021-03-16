@@ -19,10 +19,10 @@ try:
             break
         elif char == curses.KEY_UP:
             print("up")
-            GPIO.output(8, GPIO.HIGH)
+            GPIO.output(PIN_LED, GPIO.HIGH)
         elif char == curses.KEY_DOWN:
             print("down")
-            GPIO.output(8, GPIO.LOW)
+            GPIO.output(PIN_LED, GPIO.LOW)
         elif char == curses.KEY_RIGHT:
             print("right")
         elif char == curses.KEY_LEFT:
