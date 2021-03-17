@@ -2,8 +2,8 @@ import curses
 
 import RPi.GPIO as GPIO
 
-MOTOR_RIGHT_IN1 = 29
-MOTOR_RIGHT_IN2 = 31
+MOTOR_RIGHT_IN1 = 31
+MOTOR_RIGHT_IN2 = 29
 MOTOR_RIGHT_ENABLE = 33
 
 GPIO.setmode(GPIO.BOARD)
@@ -41,7 +41,7 @@ try:
         elif char == curses.KEY_DOWN:
             print("down")
             GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
-            GPIO.output(MOTOR_RIGHT_IN2, GPIO.HIHG)
+            GPIO.output(MOTOR_RIGHT_IN2, GPIO.HIGH)
             PWM_RIGHT_ENABLE.ChangeDutyCycle(50)
         elif char == curses.KEY_RIGHT:
             print("right")
