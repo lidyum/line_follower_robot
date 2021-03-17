@@ -23,26 +23,31 @@ PWM_RIGHT_ENABLE.ChangeDutyCycle(0)
 screen = curses.initscr()
 curses.noecho()
 curses.cbreak()
-screen.timeout(1000)
+
+# 500ms tuşa basılamzsa motorları durdur
+screen.timeout(500)
 screen.keypad(True)
+
+# motor hızı orta hızda başlasın
+PWM_DUTY_CYCLE_PERCENT = 50
 
 try:
     while True:
 
         char = screen.getch()
-
+        print(char)
         if char == ord('q'):
             break
         elif char == curses.KEY_UP:
             print("up")
             GPIO.output(MOTOR_RIGHT_IN1, GPIO.HIGH)
             GPIO.output(MOTOR_RIGHT_IN2, GPIO.LOW)
-            PWM_RIGHT_ENABLE.ChangeDutyCycle(50)
+            PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
         elif char == curses.KEY_DOWN:
             print("down")
             GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
             GPIO.output(MOTOR_RIGHT_IN2, GPIO.HIGH)
-            PWM_RIGHT_ENABLE.ChangeDutyCycle(50)
+            PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
         elif char == curses.KEY_RIGHT:
             print("right")
         elif char == curses.KEY_LEFT:
