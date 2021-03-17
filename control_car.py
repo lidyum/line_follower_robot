@@ -39,7 +39,7 @@ screen = curses.initscr()
 curses.noecho()
 curses.cbreak()
 
-screen.timeout(500)
+screen.timeout(250)
 screen.keypad(True)
 
 PWM_DUTY_CYCLE_MINIMUM_PERCENT = 50
