@@ -7,17 +7,31 @@ MOTOR_RIGHT_IN1 = 31
 MOTOR_RIGHT_IN2 = 29
 MOTOR_RIGHT_ENABLE = 33
 
+MOTOR_LEFT_IN1 = 40
+MOTOR_LEFT_IN2 = 38
+MOTOR_LEFT_ENABLE = 32
+
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(MOTOR_RIGHT_IN1, GPIO.OUT)
 GPIO.setup(MOTOR_RIGHT_IN2, GPIO.OUT)
 GPIO.setup(MOTOR_RIGHT_ENABLE, GPIO.OUT)
+GPIO.setup(MOTOR_LEFT_IN1, GPIO.OUT)
+GPIO.setup(MOTOR_LEFT_IN2, GPIO.OUT)
+GPIO.setup(MOTOR_LEFT_ENABLE, GPIO.OUT)
 
 PWM_RIGHT_ENABLE = GPIO.PWM(MOTOR_RIGHT_ENABLE, 1000)  # 1Khz
 PWM_RIGHT_ENABLE.start(0)
 
+PWM_LEFT_ENABLE = GPIO.PWM(MOTOR_LEFT_ENABLE, 1000)  # 1Khz
+PWM_LEFT_ENABLE.start(0)
+
 GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
 GPIO.output(MOTOR_RIGHT_IN2, GPIO.LOW)
 PWM_RIGHT_ENABLE.ChangeDutyCycle(0)
+
+GPIO.output(MOTOR_LEFT_IN1, GPIO.LOW)
+GPIO.output(MOTOR_LEFT_IN2, GPIO.LOW)
+PWM_LEFT_ENABLE.ChangeDutyCycle(0)
 
 # Get the curses window, turn off echoing of keyboard to screen, turn on
 # instant (no waiting) key response, and use special values for cursor keys
@@ -28,7 +42,46 @@ curses.cbreak()
 screen.timeout(500)
 screen.keypad(True)
 
+PWM_DUTY_CYCLE_MINIMUM_PERCENT = 35
+PWM_DUTY_CYCLE_MAXIMUM_PERCENT = 100
 PWM_DUTY_CYCLE_PERCENT = 50
+
+
+def left_motor_forward():
+    GPIO.output(MOTOR_LEFT_IN1, GPIO.HIGH)
+    GPIO.output(MOTOR_LEFT_IN2, GPIO.LOW)
+    PWM_LEFT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
+
+
+def left_motor_stop():
+    GPIO.output(MOTOR_LEFT_IN1, GPIO.LOW)
+    GPIO.output(MOTOR_LEFT_IN2, GPIO.LOW)
+    PWM_LEFT_ENABLE.ChangeDutyCycle(0)
+
+
+def left_motor_backward():
+    GPIO.output(MOTOR_LEFT_IN1, GPIO.LOW)
+    GPIO.output(MOTOR_LEFT_IN2, GPIO.HIGH)
+    PWM_LEFT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
+
+
+def right_motor_forward():
+    GPIO.output(MOTOR_RIGHT_IN1, GPIO.HIGH)
+    GPIO.output(MOTOR_RIGHT_IN2, GPIO.LOW)
+    PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
+
+
+def right_motor_stop():
+    GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
+    GPIO.output(MOTOR_RIGHT_IN2, GPIO.LOW)
+    PWM_RIGHT_ENABLE.ChangeDutyCycle(0)
+
+
+def right_motor_backward():
+    GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
+    GPIO.output(MOTOR_RIGHT_IN2, GPIO.HIGH)
+    PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
+
 
 try:
     while True:
@@ -39,35 +92,36 @@ try:
             break
         elif char == curses.KEY_UP:
             print("up")
-            GPIO.output(MOTOR_RIGHT_IN1, GPIO.HIGH)
-            GPIO.output(MOTOR_RIGHT_IN2, GPIO.LOW)
-            PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
+            left_motor_forward()
+            right_motor_forward()
         elif char == curses.KEY_DOWN:
             print("down")
-            GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
-            GPIO.output(MOTOR_RIGHT_IN2, GPIO.HIGH)
-            PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
+            left_motor_backward()
+            right_motor_backward()
         elif char == curses.KEY_RIGHT:
             print("right")
+            right_motor_backward()
+            left_motor_stop()
         elif char == curses.KEY_LEFT:
             print("left")
+            left_motor_backward()
+            right_motor_stop()
         elif char == curses.KEY_PPAGE:
             print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
             PWM_DUTY_CYCLE_PERCENT += 1
-            if PWM_DUTY_CYCLE_PERCENT > 100:
-                PWM_DUTY_CYCLE_PERCENT = 100
+            if PWM_DUTY_CYCLE_PERCENT >= PWM_DUTY_CYCLE_MAXIMUM_PERCENT:
+                PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MAXIMUM_PERCENT
             time.sleep(0.2)
         elif char == curses.KEY_NPAGE:
             print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
             PWM_DUTY_CYCLE_PERCENT -= 1
-            if PWM_DUTY_CYCLE_PERCENT <= 0:
-                PWM_DUTY_CYCLE_PERCENT = 1
+            if PWM_DUTY_CYCLE_PERCENT <= PWM_DUTY_CYCLE_MINIMUM_PERCENT:
+                PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MINIMUM_PERCENT
             time.sleep(0.2)
         else:
             print("stop motor")
-            GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
-            GPIO.output(MOTOR_RIGHT_IN2, GPIO.LOW)
-            PWM_RIGHT_ENABLE.ChangeDutyCycle(0)
+            left_motor_stop()
+            right_motor_stop()
 
 finally:
     # Close down curses properly, inc turn echo back on!
@@ -76,6 +130,5 @@ finally:
     curses.echo()
     curses.endwin()
 
-    GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
-    GPIO.output(MOTOR_RIGHT_IN2, GPIO.LOW)
-    PWM_RIGHT_ENABLE.ChangeDutyCycle(0)
+    left_motor_stop()
+    right_motor_stop()
