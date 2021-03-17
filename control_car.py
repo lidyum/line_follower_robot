@@ -16,7 +16,7 @@ GPIO.output(MOTOR_LEFT_IN2, GPIO.LOW)
 screen = curses.initscr()
 curses.noecho()
 curses.cbreak()
-curses.timeout(1000)
+screen.timeout(1000)
 screen.keypad(True)
 
 try:
