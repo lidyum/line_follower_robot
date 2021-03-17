@@ -100,11 +100,11 @@ try:
             right_motor_backward()
         elif char == curses.KEY_RIGHT:
             print("right")
-            right_motor_backward()
+            right_motor_forward()
             left_motor_stop()
         elif char == curses.KEY_LEFT:
             print("left")
-            left_motor_backward()
+            left_motor_forward()
             right_motor_stop()
         elif char == curses.KEY_PPAGE:
             print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
