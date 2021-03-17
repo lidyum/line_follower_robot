@@ -24,11 +24,9 @@ screen = curses.initscr()
 curses.noecho()
 curses.cbreak()
 
-# 500ms tuşa basılamzsa motorları durdur
 screen.timeout(500)
 screen.keypad(True)
 
-# motor hızı orta hızda başlasın
 PWM_DUTY_CYCLE_PERCENT = 50
 
 try:
