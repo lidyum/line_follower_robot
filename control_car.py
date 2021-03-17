@@ -1,4 +1,5 @@
 import curses
+import time
 
 import RPi.GPIO as GPIO
 
@@ -50,6 +51,18 @@ try:
             print("right")
         elif char == curses.KEY_LEFT:
             print("left")
+        elif char == curses.KEY_PPAGE:
+            print(f"DUTY CYCLE {PWM_DUTY_CYCLE_PERCENT}")
+            PWM_DUTY_CYCLE_PERCENT += 1
+            if PWM_DUTY_CYCLE_PERCENT > 100:
+                PWM_DUTY_CYCLE_PERCENT = 100
+            time.sleep(500)
+        elif char == curses.KEY_NPAGE:
+            print(f"DUTY CYCLE {PWM_DUTY_CYCLE_PERCENT}")
+            PWM_DUTY_CYCLE_PERCENT -= 1
+            if PWM_DUTY_CYCLE_PERCENT <= 0:
+                PWM_DUTY_CYCLE_PERCENT = 1
+            time.sleep(500)
         else:
             print("stop motor")
             GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
