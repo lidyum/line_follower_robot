@@ -1,7 +1,7 @@
 import RPi.GPIO as GPIO
 from time import sleep
 
-PIN_LED = 12
+PIN_LED = 35
 GPIO.setmode(GPIO.BOARD)  # set pin numbering system
 GPIO.setup(PIN_LED, GPIO.OUT)
 pi_pwm = GPIO.PWM(PIN_LED, 1000)  # 1Khz
