@@ -56,13 +56,13 @@ try:
             PWM_DUTY_CYCLE_PERCENT += 1
             if PWM_DUTY_CYCLE_PERCENT > 100:
                 PWM_DUTY_CYCLE_PERCENT = 100
-            time.sleep(0.5)
+            time.sleep(0.2)
         elif char == curses.KEY_NPAGE:
             print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
             PWM_DUTY_CYCLE_PERCENT -= 1
             if PWM_DUTY_CYCLE_PERCENT <= 0:
                 PWM_DUTY_CYCLE_PERCENT = 1
-            time.sleep(0.5)
+            time.sleep(0.2)
         else:
             print("stop motor")
             GPIO.output(MOTOR_RIGHT_IN1, GPIO.LOW)
