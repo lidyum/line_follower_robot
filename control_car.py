@@ -95,6 +95,7 @@ try:
         print(char)
         if char == ord('O') or char == ord('o'):
             while True:
+                char = screen.getch()
                 if char == ord('Q') or char == ord('q'):
                     break
                 else:
