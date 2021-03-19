@@ -103,9 +103,11 @@ try:
                     if is_right_on_line:
                         left_motor_forward()
                         right_motor_stop()
+                        print("RIGHT SENSOR ONLINE")
                     elif is_left_on_line:
                         right_motor_forward()
                         left_motor_stop()
+                        print("LEFT SENSOR ONLINE")
                     else:
                         right_motor_stop()
                         left_motor_stop()
