@@ -93,9 +93,9 @@ try:
 
         char = screen.getch()
         print(char)
-        if char == ord('O') | char == ord('o'):
+        if char == ord('O') or char == ord('o'):
             while True:
-                if char == ord('Q') | char == ord('q'):
+                if char == ord('Q') or char == ord('q'):
                     break
                 else:
                     is_right_on_line = GPIO.input(SENSOR_RIGHT)
