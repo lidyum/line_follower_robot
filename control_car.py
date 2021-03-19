@@ -100,9 +100,6 @@ try:
                 else:
                     is_right_on_line = GPIO.input(SENSOR_RIGHT)
                     is_left_on_line = GPIO.input(SENSOR_LEFT)
-                    print("right_sensor_on_line", is_right_on_line)
-                    print("left_sensor_on_line", is_left_on_line)
-                    time.sleep(2)
                     if is_right_on_line:
                         left_motor_forward()
                         right_motor_stop()
