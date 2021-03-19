@@ -6,10 +6,12 @@ import RPi.GPIO as GPIO
 MOTOR_RIGHT_IN1 = 31
 MOTOR_RIGHT_IN2 = 29
 MOTOR_RIGHT_ENABLE = 33
+SENSOR_RIGHT = 37
 
 MOTOR_LEFT_IN1 = 38
 MOTOR_LEFT_IN2 = 40
 MOTOR_LEFT_ENABLE = 32
+SENSOR_LEFT = 36
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setup(MOTOR_RIGHT_IN1, GPIO.OUT)
@@ -18,6 +20,9 @@ GPIO.setup(MOTOR_RIGHT_ENABLE, GPIO.OUT)
 GPIO.setup(MOTOR_LEFT_IN1, GPIO.OUT)
 GPIO.setup(MOTOR_LEFT_IN2, GPIO.OUT)
 GPIO.setup(MOTOR_LEFT_ENABLE, GPIO.OUT)
+
+GPIO.setup(SENSOR_RIGHT, GPIO.IN)
+GPIO.setup(SENSOR_LEFT, GPIO.IN)
 
 PWM_RIGHT_ENABLE = GPIO.PWM(MOTOR_RIGHT_ENABLE, 1000)  # 1Khz
 PWM_RIGHT_ENABLE.start(0)
@@ -88,40 +93,55 @@ try:
 
         char = screen.getch()
         print(char)
-        if char == ord('q'):
-            break
-        elif char == curses.KEY_UP:
-            print("up")
-            left_motor_forward()
-            right_motor_forward()
-        elif char == curses.KEY_DOWN:
-            print("down")
-            left_motor_backward()
-            right_motor_backward()
-        elif char == curses.KEY_RIGHT:
-            print("right")
-            left_motor_forward()
-            right_motor_stop()
-        elif char == curses.KEY_LEFT:
-            print("left")
-            right_motor_forward()
-            left_motor_stop()
-        elif char == curses.KEY_PPAGE:
-            print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
-            PWM_DUTY_CYCLE_PERCENT += 1
-            if PWM_DUTY_CYCLE_PERCENT >= PWM_DUTY_CYCLE_MAXIMUM_PERCENT:
-                PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MAXIMUM_PERCENT
-            time.sleep(0.2)
-        elif char == curses.KEY_NPAGE:
-            print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
-            PWM_DUTY_CYCLE_PERCENT -= 1
-            if PWM_DUTY_CYCLE_PERCENT <= PWM_DUTY_CYCLE_MINIMUM_PERCENT:
-                PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MINIMUM_PERCENT
-            time.sleep(0.2)
+        if char == ord('O') | char == ord('o'):
+            while True:
+                if char == ord('Q') | char == ord('q'):
+                    break
+                else:
+                    is_right_on_line = GPIO.input(SENSOR_RIGHT)
+                    is_left_on_line = GPIO.input(SENSOR_LEFT)
+                    if is_right_on_line:
+                        left_motor_forward()
+                        right_motor_stop()
+                    elif is_left_on_line:
+                        right_motor_forward()
+                        left_motor_stop()
+                    else:
+                        right_motor_stop()
+                        left_motor_stop()
         else:
-            print("stop motor")
-            left_motor_stop()
-            right_motor_stop()
+            if char == curses.KEY_UP:
+                print("up")
+                left_motor_forward()
+                right_motor_forward()
+            elif char == curses.KEY_DOWN:
+                print("down")
+                left_motor_backward()
+                right_motor_backward()
+            elif char == curses.KEY_RIGHT:
+                print("right")
+                left_motor_forward()
+                right_motor_stop()
+            elif char == curses.KEY_LEFT:
+                print("left")
+                right_motor_forward()
+                left_motor_stop()
+            elif char == curses.KEY_PPAGE:
+                print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
+                PWM_DUTY_CYCLE_PERCENT += 1
+                if PWM_DUTY_CYCLE_PERCENT >= PWM_DUTY_CYCLE_MAXIMUM_PERCENT:
+                    PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MAXIMUM_PERCENT
+                time.sleep(0.1)
+            elif char == curses.KEY_NPAGE:
+                print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
+                PWM_DUTY_CYCLE_PERCENT -= 1
+                if PWM_DUTY_CYCLE_PERCENT <= PWM_DUTY_CYCLE_MINIMUM_PERCENT:
+                    PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MINIMUM_PERCENT
+                time.sleep(0.1)
+            else:
+                print("stop motor")
+                left_motor_stop()
+                right_motor_stop()
 
 finally:
     # Close down curses properly, inc turn echo back on!
