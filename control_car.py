@@ -110,8 +110,8 @@ try:
                         left_motor_stop()
                         print("LEFT SENSOR ONLINE")
                     else:
-                        right_motor_stop()
-                        left_motor_stop()
+                        right_motor_forward()
+                        left_motor_forward()
         else:
             if char == curses.KEY_UP:
                 print("up")
