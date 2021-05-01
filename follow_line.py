@@ -14,6 +14,7 @@ MOTOR_LEFT_ENABLE = 32
 SENSOR_LEFT = 36
 
 GPIO.setmode(GPIO.BOARD)
+GPIO.cleanup()
 GPIO.setup(MOTOR_RIGHT_IN1, GPIO.OUT)
 GPIO.setup(MOTOR_RIGHT_IN2, GPIO.OUT)
 GPIO.setup(MOTOR_RIGHT_ENABLE, GPIO.OUT)
@@ -79,13 +80,16 @@ def right_motor_backward():
     PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
 
 
-while True:
-    is_right_on_line = GPIO.input(SENSOR_RIGHT)
-    is_left_on_line = GPIO.input(SENSOR_LEFT)
-    if (is_right_on_line and is_left_on_line) or (not is_right_on_line and not is_left_on_line):
-        right_motor_forward()
-        left_motor_forward()
-    elif is_right_on_line:
-        right_motor_stop()
-    elif is_left_on_line:
-        left_motor_stop()
+try:
+    while True:
+        is_right_on_line = GPIO.input(SENSOR_RIGHT)
+        is_left_on_line = GPIO.input(SENSOR_LEFT)
+        if (is_right_on_line and is_left_on_line) or (not is_right_on_line and not is_left_on_line):
+            right_motor_forward()
+            left_motor_forward()
+        elif is_right_on_line:
+            right_motor_stop()
+        elif is_left_on_line:
+            left_motor_stop()
+except:
+    GPIO.cleanup()
