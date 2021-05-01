@@ -82,14 +82,10 @@ def right_motor_backward():
 while True:
     is_right_on_line = GPIO.input(SENSOR_RIGHT)
     is_left_on_line = GPIO.input(SENSOR_LEFT)
-    if is_right_on_line:
+    if (is_right_on_line and is_left_on_line) or (not is_right_on_line and not is_left_on_line):
+        right_motor_forward()
         left_motor_forward()
+    elif is_right_on_line:
         right_motor_stop()
-        print("RIGHT SENSOR ONLINE")
     elif is_left_on_line:
-        right_motor_forward()
         left_motor_stop()
-        print("LEFT SENSOR ONLINE")
-    else:
-        right_motor_forward()
-        left_motor_forward()
