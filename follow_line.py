@@ -38,15 +38,6 @@ GPIO.output(MOTOR_LEFT_IN1, GPIO.LOW)
 GPIO.output(MOTOR_LEFT_IN2, GPIO.LOW)
 PWM_LEFT_ENABLE.ChangeDutyCycle(0)
 
-# Get the curses window, turn off echoing of keyboard to screen, turn on
-# instant (no waiting) key response, and use special values for cursor keys
-screen = curses.initscr()
-curses.noecho()
-curses.cbreak()
-
-screen.timeout(400)
-screen.keypad(True)
-
 PWM_DUTY_CYCLE_MINIMUM_PERCENT = 50
 PWM_DUTY_CYCLE_MAXIMUM_PERCENT = 100
 PWM_DUTY_CYCLE_PERCENT = 50
@@ -88,29 +79,17 @@ def right_motor_backward():
     PWM_RIGHT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
 
 
-try:
-
-    while True:
-        is_right_on_line = GPIO.input(SENSOR_RIGHT)
-        is_left_on_line = GPIO.input(SENSOR_LEFT)
-        if is_right_on_line:
-            left_motor_forward()
-            right_motor_stop()
-            print("RIGHT SENSOR ONLINE")
-        elif is_left_on_line:
-            right_motor_forward()
-            left_motor_stop()
-            print("LEFT SENSOR ONLINE")
-        else:
-            right_motor_forward()
-            left_motor_forward()
-
-finally:
-    # Close down curses properly, inc turn echo back on!
-    curses.nocbreak();
-    screen.keypad(0);
-    curses.echo()
-    curses.endwin()
-
-    left_motor_stop()
-    right_motor_stop()
+while True:
+    is_right_on_line = GPIO.input(SENSOR_RIGHT)
+    is_left_on_line = GPIO.input(SENSOR_LEFT)
+    if is_right_on_line:
+        left_motor_forward()
+        right_motor_stop()
+        print("RIGHT SENSOR ONLINE")
+    elif is_left_on_line:
+        right_motor_forward()
+        left_motor_stop()
+        print("LEFT SENSOR ONLINE")
+    else:
+        right_motor_forward()
+        left_motor_forward()
