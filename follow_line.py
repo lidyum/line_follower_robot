@@ -89,41 +89,21 @@ def right_motor_backward():
 
 
 try:
+
     while True:
-        char = screen.getch()
-        
-        if char == curses.KEY_UP:
-            print("up")
-            left_motor_forward()
-            right_motor_forward()
-        elif char == curses.KEY_DOWN:
-            print("down")
-            left_motor_backward()
-            right_motor_backward()
-        elif char == curses.KEY_RIGHT:
-            print("right")
+        is_right_on_line = GPIO.input(SENSOR_RIGHT)
+        is_left_on_line = GPIO.input(SENSOR_LEFT)
+        if is_right_on_line:
             left_motor_forward()
             right_motor_stop()
-        elif char == curses.KEY_LEFT:
-            print("left")
+            print("RIGHT SENSOR ONLINE")
+        elif is_left_on_line:
             right_motor_forward()
             left_motor_stop()
-        elif char == curses.KEY_PPAGE:
-            print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
-            PWM_DUTY_CYCLE_PERCENT += 1
-            if PWM_DUTY_CYCLE_PERCENT >= PWM_DUTY_CYCLE_MAXIMUM_PERCENT:
-                PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MAXIMUM_PERCENT
-            time.sleep(0.1)
-        elif char == curses.KEY_NPAGE:
-            print("DUTY CYCLE " + str(PWM_DUTY_CYCLE_PERCENT))
-            PWM_DUTY_CYCLE_PERCENT -= 1
-            if PWM_DUTY_CYCLE_PERCENT <= PWM_DUTY_CYCLE_MINIMUM_PERCENT:
-                PWM_DUTY_CYCLE_PERCENT = PWM_DUTY_CYCLE_MINIMUM_PERCENT
-            time.sleep(0.1)
+            print("LEFT SENSOR ONLINE")
         else:
-            print("stop motor")
-            left_motor_stop()
-            right_motor_stop()
+            right_motor_forward()
+            left_motor_forward()
 
 finally:
     # Close down curses properly, inc turn echo back on!
