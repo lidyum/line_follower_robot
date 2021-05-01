@@ -1,0 +1,15 @@
+[Unit]
+Description=Follow Line
+After=network.target
+
+[Service]
+Type=idle
+ExecStart=/bin/bash -c 'cd /line_follower_robot/ && source venv/bin/activate && venv/bin/python3 -u follow_line.py'
+WorkingDirectory=/line_follower_robot
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
