@@ -1,0 +1,8 @@
+sudo apt-get install python3-venv
+
+python3 -m venv venv
+source venv/bin/activate
+
+sudo cp follow_line.service /etc/systemd/system/follow_line.service
+sudo systemctl restart follow_line.service
+sudo systemctl enable follow_line.service
