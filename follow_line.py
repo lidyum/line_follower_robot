@@ -49,6 +49,7 @@ def left_motor_forward():
     PWM_LEFT_ENABLE.ChangeDutyCycle(PWM_DUTY_CYCLE_PERCENT)
 
 
+
 def left_motor_stop():
     GPIO.output(MOTOR_LEFT_IN1, GPIO.LOW)
     GPIO.output(MOTOR_LEFT_IN2, GPIO.LOW)
